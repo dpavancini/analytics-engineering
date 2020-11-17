@@ -15,7 +15,7 @@ O banco de dados do ERP da empresa é um sistema PostgreSQL em um servidor nuvem
 Você foi contratado como engenheiro de Analytics na Northwind e sua tarefa é estruturar uma infra-estrutura de Analytics completa utilizando os conceitos e ferramentas adequadas para essa tarefa. Para isso serão necessárias algumas etapas ao longo do caminho:
 
 * [Configurando o banco de dados](configurando_bd.md)
-* Estudo de Caso 1:  Entendimento do Problema
+* [Estudo de Caso 1:  Entendimento do Problema](estudo_caso_1.md])
 * Estudo de Caso 2:  Planejamento do Projeto
 * Estudo de Caso 3:  Arquitetura do DW
 * Estudo de Caso 4:  Transformação de Dados
