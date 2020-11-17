@@ -16,7 +16,7 @@ Você foi contratado como engenheiro de Analytics na Northwind e sua tarefa é e
 
 * [Configurando o banco de dados](configurando_bd.md)
 * [Estudo de Caso 1:  Entendimento do Problema](estudo_caso_1.md)
-* Estudo de Caso 2:  Planejamento do Projeto
-* Estudo de Caso 3:  Arquitetura do DW
-* Estudo de Caso 4:  Transformação de Dados
-* Estudo de Caso 5:  Visualização de Dados
+* [Estudo de Caso 2:  Planejamento do Projeto](estudo_caso_2.md)
+* [Estudo de Caso 3:  Arquitetura do DW](estudo_caso_3.md)
+* [Estudo de Caso 4:  Transformação de Dados](estudo_caso_4.md)
+* [Estudo de Caso 5:  Visualização de Dados](estudo_caso_5.md)

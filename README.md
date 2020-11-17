@@ -5,4 +5,4 @@ Neste respositório estão disponibilizados materiais de apoio ao Livro Analytic
 
 ## Sumário
 
-* [Northwind](Northwind/README.md)
+* [Estudo de Caso Northwind](Northwind/README.md)
