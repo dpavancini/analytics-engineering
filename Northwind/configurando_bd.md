@@ -25,6 +25,7 @@ Se você já possui um banco de dados PostgreSQL instalado ou quer criá-lo da f
 2. Na pasta onde o arquivo `northwind.sql` estiver localizado, rode o comando abaixo para popular o banco de dados:
 
 ```
+createdb -U [seu-usuario] -h [seu-host] northwind && 
 cat northwind.sql | psql -U [seu-usuario] -h [seu-host] -d northwind
 
 ```

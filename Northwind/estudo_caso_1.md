@@ -8,11 +8,13 @@ Vamos re-lembrar o contexto da  Northwind Traders. Hoje a Northwind possui relat
 
 ## Dados:
 
-[incluir no github as exportações de dados da northwind]
+14 Tabelas do ERP da Northwind disponível na pasta [tabelas](tabelas)
 
 ## Desafio:
 
 Neste desafio você vai gerar um relatório com indicadores de performance para responder as demandas da Northwind. Para isso você pode utilizar as técnicas analíticas apresentadas neste capítulo para justificar a escolha desses indicadores e como podemos agir em cima deles para melhorar os resultados da empresa. Você pode usar a ferramenta ou ferramentas que tiver maior facilidade ou achar mais interessante tais como Excel, Google Sheets, Python, R, etc.  Lembre que este relatório será apresentado para nosso CEO, então você deve formatá-lo de forma profissional.
+
+O entendimento das tabelas e manipulação delas faz parte do desafio. Lembre-se de tomar cuidado com os formatos dos dados (separadores e decimal).
 
 ## Entrega:
 
