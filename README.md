@@ -7,4 +7,4 @@ Neste respositório estão disponibilizados materiais de apoio ao Livro Analytic
 
 * [Estudo de Caso Northwind](Northwind/README.md)
 * [Extração de dados via Singer Taps](Extract/README.md)
-* [Transformação via dbt](dbt_northwind/README.md)
+* [Transformação via dbt](https://github.com/dpavancini/dbt_northwind/tree/master/README.md)
