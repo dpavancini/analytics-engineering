@@ -6,3 +6,4 @@ Neste respositório estão disponibilizados materiais de apoio ao Livro Analytic
 ## Sumário
 
 * [Estudo de Caso Northwind](Northwind/README.md)
+* [Extração de dados via Singer Taps](Extract/README.md)
