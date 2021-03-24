@@ -56,19 +56,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION tablefunc;
 
 -------------------------------------
--- Custom data types
--------------------------------------
-
-CREATE DOMAIN "OrderNumber" varchar(25) NULL;
-CREATE DOMAIN "AccountNumber" varchar(15) NULL;
-
-CREATE DOMAIN "Flag" boolean NOT NULL;
-CREATE DOMAIN "NameStyle" boolean NOT NULL;
-CREATE DOMAIN "Name" varchar(50) NULL;
-CREATE DOMAIN "Phone" varchar(25) NULL;
-
-
--------------------------------------
 -- Five schemas, with tables and data
 -------------------------------------
 
@@ -81,11 +68,11 @@ CREATE SCHEMA Person
   CREATE TABLE Person(
     BusinessEntityID INT NOT NULL,
     PersonType char(2) NOT NULL,
-    NameStyle "NameStyle" NOT NULL CONSTRAINT "DF_Person_NameStyle" DEFAULT (false),
+    NameStyle boolean NOT NULL CONSTRAINT "DF_Person_NameStyle" DEFAULT (false),
     Title varchar(8) NULL,
-    FirstName "Name" NOT NULL,
-    MiddleName "Name" NULL,
-    LastName "Name" NOT NULL,
+    FirstName varchar(50) NOT NULL,
+    MiddleName varchar(50) NULL,
+    LastName varchar(50) NOT NULL,
     Suffix varchar(10) NULL,
     EmailPromotion INT NOT NULL CONSTRAINT "DF_Person_EmailPromotion" DEFAULT (0),
     AdditionalContactInfo XML NULL, -- XML("AdditionalContactInfoSchemaCollection"),
@@ -99,8 +86,8 @@ CREATE SCHEMA Person
     StateProvinceID SERIAL,
     StateProvinceCode char(3) NOT NULL,
     CountryRegionCode varchar(3) NOT NULL,
-    IsOnlyStateProvinceFlag "Flag" NOT NULL CONSTRAINT "DF_StateProvince_IsOnlyStateProvinceFlag" DEFAULT (true),
-    Name "Name" NOT NULL,
+    IsOnlyStateProvinceFlag boolean NOT NULL CONSTRAINT "DF_StateProvince_IsOnlyStateProvinceFlag" DEFAULT (true),
+    Name varchar(50) NOT NULL,
     TerritoryID INT NOT NULL,
     rowguid uuid NOT NULL CONSTRAINT "DF_StateProvince_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_StateProvince_ModifiedDate" DEFAULT (NOW())
@@ -118,7 +105,7 @@ CREATE SCHEMA Person
   )
   CREATE TABLE AddressType(
     AddressTypeID SERIAL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     rowguid uuid NOT NULL CONSTRAINT "DF_AddressType_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_AddressType_ModifiedDate" DEFAULT (NOW())
   )
@@ -131,7 +118,7 @@ CREATE SCHEMA Person
   )
   CREATE TABLE ContactType(
     ContactTypeID SERIAL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_ContactType_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE BusinessEntityContact(
@@ -157,18 +144,18 @@ CREATE SCHEMA Person
   )
   CREATE TABLE PhoneNumberType(
     PhoneNumberTypeID SERIAL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_PhoneNumberType_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE PersonPhone(
     BusinessEntityID INT NOT NULL,
-    PhoneNumber "Phone" NOT NULL,
+    PhoneNumber varchar(25) NOT NULL,
     PhoneNumberTypeID INT NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_PersonPhone_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE CountryRegion(
     CountryRegionCode varchar(3) NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_CountryRegion_ModifiedDate" DEFAULT (NOW())
   );
 
@@ -205,8 +192,8 @@ SELECT 'Copying data into Person.CountryRegion';
 CREATE SCHEMA HumanResources
   CREATE TABLE Department(
     DepartmentID SERIAL NOT NULL, -- smallint
-    Name "Name" NOT NULL,
-    GroupName "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
+    GroupName varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Department_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE Employee(
@@ -220,10 +207,10 @@ CREATE SCHEMA HumanResources
     MaritalStatus char(1) NOT NULL,
     Gender char(1) NOT NULL,
     HireDate DATE NOT NULL,
-    SalariedFlag "Flag" NOT NULL CONSTRAINT "DF_Employee_SalariedFlag" DEFAULT (true),
+    SalariedFlag boolean NOT NULL CONSTRAINT "DF_Employee_SalariedFlag" DEFAULT (true),
     VacationHours smallint NOT NULL CONSTRAINT "DF_Employee_VacationHours" DEFAULT (0),
     SickLeaveHours smallint NOT NULL CONSTRAINT "DF_Employee_SickLeaveHours" DEFAULT (0),
-    CurrentFlag "Flag" NOT NULL CONSTRAINT "DF_Employee_CurrentFlag" DEFAULT (true),
+    CurrentFlag boolean NOT NULL CONSTRAINT "DF_Employee_CurrentFlag" DEFAULT (true),
     rowguid uuid NOT NULL CONSTRAINT "DF_Employee_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Employee_ModifiedDate" DEFAULT (NOW()),
     CONSTRAINT "CK_Employee_BirthDate" CHECK (BirthDate BETWEEN '1930-01-01' AND NOW() - INTERVAL '18 years'),
@@ -259,7 +246,7 @@ CREATE SCHEMA HumanResources
   )
   CREATE TABLE Shift(
     ShiftID SERIAL NOT NULL, -- tinyint
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     StartTime time NOT NULL,
     EndTime time NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Shift_ModifiedDate" DEFAULT (NOW())
@@ -386,7 +373,7 @@ CREATE SCHEMA Production
   )
   CREATE TABLE Culture(
     CultureID char(6) NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Culture_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE Document(
@@ -394,7 +381,7 @@ CREATE SCHEMA Production
     DocumentLevel INTEGER, -- AS DocumentNode.GetLevel(),
     Title varchar(50) NOT NULL,
     Owner INT NOT NULL,
-    FolderFlag "Flag" NOT NULL CONSTRAINT "DF_Document_FolderFlag" DEFAULT (false),
+    FolderFlag boolean NOT NULL CONSTRAINT "DF_Document_FolderFlag" DEFAULT (false),
     FileName varchar(400) NOT NULL,
     FileExtension varchar(8) NULL,
     Revision char(5) NOT NULL,
@@ -408,20 +395,20 @@ CREATE SCHEMA Production
   )
   CREATE TABLE ProductCategory(
     ProductCategoryID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     rowguid uuid NOT NULL CONSTRAINT "DF_ProductCategory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_ProductCategory_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE ProductSubcategory(
     ProductSubcategoryID SERIAL NOT NULL, -- int
     ProductCategoryID INT NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     rowguid uuid NOT NULL CONSTRAINT "DF_ProductSubcategory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_ProductSubcategory_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE ProductModel(
     ProductModelID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     CatalogDescription XML NULL, -- XML(Production.ProductDescriptionSchemaCollection)
     Instructions XML NULL, -- XML(Production.ManuInstructionsSchemaCollection)
     rowguid uuid NOT NULL CONSTRAINT "DF_ProductModel_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
@@ -429,10 +416,10 @@ CREATE SCHEMA Production
   )
   CREATE TABLE Product(
     ProductID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ProductNumber varchar(25) NOT NULL,
-    MakeFlag "Flag" NOT NULL CONSTRAINT "DF_Product_MakeFlag" DEFAULT (true),
-    FinishedGoodsFlag "Flag" NOT NULL CONSTRAINT "DF_Product_FinishedGoodsFlag" DEFAULT (true),
+    MakeFlag boolean NOT NULL CONSTRAINT "DF_Product_MakeFlag" DEFAULT (true),
+    FinishedGoodsFlag boolean NOT NULL CONSTRAINT "DF_Product_FinishedGoodsFlag" DEFAULT (true),
     Color varchar(15) NULL,
     SafetyStockLevel smallint NOT NULL,
     ReorderPoint smallint NOT NULL,
@@ -486,7 +473,7 @@ CREATE SCHEMA Production
   )
   CREATE TABLE Location(
     LocationID SERIAL NOT NULL, -- smallint
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     CostRate numeric NOT NULL CONSTRAINT "DF_Location_CostRate" DEFAULT (0.00), -- smallmoney -- money
     Availability decimal(8, 2) NOT NULL CONSTRAINT "DF_Location_Availability" DEFAULT (0.00),
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Location_ModifiedDate" DEFAULT (NOW()),
@@ -540,13 +527,13 @@ CREATE SCHEMA Production
   CREATE TABLE ProductProductPhoto(
     ProductID INT NOT NULL,
     ProductPhotoID INT NOT NULL,
-    "primary" "Flag" NOT NULL CONSTRAINT "DF_ProductProductPhoto_Primary" DEFAULT (false),
+    "primary" boolean NOT NULL CONSTRAINT "DF_ProductProductPhoto_Primary" DEFAULT (false),
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_ProductProductPhoto_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE ProductReview(
     ProductReviewID SERIAL NOT NULL, -- int
     ProductID INT NOT NULL,
-    ReviewerName "Name" NOT NULL,
+    ReviewerName varchar(50) NOT NULL,
     ReviewDate TIMESTAMP NOT NULL CONSTRAINT "DF_ProductReview_ReviewDate" DEFAULT (NOW()),
     EmailAddress varchar(50) NOT NULL,
     Rating INT NOT NULL,
@@ -556,7 +543,7 @@ CREATE SCHEMA Production
   )
   CREATE TABLE ScrapReason(
     ScrapReasonID SERIAL NOT NULL, -- smallint
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_ScrapReason_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE TransactionHistory(
@@ -585,7 +572,7 @@ CREATE SCHEMA Production
   )
   CREATE TABLE UnitMeasure(
     UnitMeasureCode char(3) NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_UnitMeasure_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE WorkOrder(
@@ -949,7 +936,7 @@ CREATE SCHEMA Purchasing
   )
   CREATE TABLE ShipMethod(
     ShipMethodID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ShipBase numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipBase" DEFAULT (0.00), -- money
     ShipRate numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipRate" DEFAULT (0.00), -- money
     rowguid uuid NOT NULL CONSTRAINT "DF_ShipMethod_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
@@ -959,11 +946,11 @@ CREATE SCHEMA Purchasing
   )
   CREATE TABLE Vendor(
     BusinessEntityID INT NOT NULL,
-    AccountNumber "AccountNumber" NOT NULL,
-    Name "Name" NOT NULL,
+    AccountNumber varchar(25) NOT NULL,
+    Name varchar(50) NOT NULL,
     CreditRating smallint NOT NULL, -- tinyint
-    PreferredVendorStatus "Flag" NOT NULL CONSTRAINT "DF_Vendor_PreferredVendorStatus" DEFAULT (true),
-    ActiveFlag "Flag" NOT NULL CONSTRAINT "DF_Vendor_ActiveFlag" DEFAULT (true),
+    PreferredVendorStatus boolean NOT NULL CONSTRAINT "DF_Vendor_PreferredVendorStatus" DEFAULT (true),
+    ActiveFlag boolean NOT NULL CONSTRAINT "DF_Vendor_ActiveFlag" DEFAULT (true),
     PurchasingWebServiceURL varchar(1024) NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Vendor_ModifiedDate" DEFAULT (NOW()),
     CONSTRAINT "CK_Vendor_CreditRating" CHECK (CreditRating BETWEEN 1 AND 5)
@@ -1005,7 +992,7 @@ CREATE SCHEMA Sales
   )
   CREATE TABLE Currency(
     CurrencyCode char(3) NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_Currency_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE CurrencyRate(
@@ -1055,10 +1042,10 @@ CREATE SCHEMA Sales
     DueDate TIMESTAMP NOT NULL,
     ShipDate TIMESTAMP NULL,
     Status smallint NOT NULL CONSTRAINT "DF_SalesOrderHeader_Status" DEFAULT (1), -- tinyint
-    OnlineOrderFlag "Flag" NOT NULL CONSTRAINT "DF_SalesOrderHeader_OnlineOrderFlag" DEFAULT (true),
+    OnlineOrderFlag boolean NOT NULL CONSTRAINT "DF_SalesOrderHeader_OnlineOrderFlag" DEFAULT (true),
     SalesOrderNumber VARCHAR(23), -- AS ISNULL(N'SO' + CONVERT(nvarchar(23), SalesOrderID), N'*** ERROR ***'),
-    PurchaseOrderNumber "OrderNumber" NULL,
-    AccountNumber "AccountNumber" NULL,
+    PurchaseOrderNumber varchar(25) NULL,
+    AccountNumber varchar(25) NULL,
     CustomerID INT NOT NULL,
     SalesPersonID INT NULL,
     TerritoryID INT NULL,
@@ -1113,8 +1100,8 @@ CREATE SCHEMA Sales
   )
   CREATE TABLE SalesReason(
     SalesReasonID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
-    ReasonType "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
+    ReasonType varchar(50) NOT NULL,
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_SalesReason_ModifiedDate" DEFAULT (NOW())
   )
   CREATE TABLE SalesTaxRate(
@@ -1122,14 +1109,14 @@ CREATE SCHEMA Sales
     StateProvinceID INT NOT NULL,
     TaxType smallint NOT NULL, -- tinyint
     TaxRate numeric NOT NULL CONSTRAINT "DF_SalesTaxRate_TaxRate" DEFAULT (0.00), -- smallmoney -- money
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     rowguid uuid NOT NULL CONSTRAINT "DF_SalesTaxRate_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
     ModifiedDate TIMESTAMP NOT NULL CONSTRAINT "DF_SalesTaxRate_ModifiedDate" DEFAULT (NOW()),
     CONSTRAINT "CK_SalesTaxRate_TaxType" CHECK (TaxType BETWEEN 1 AND 3)
   )
   CREATE TABLE SalesTerritory(
     TerritoryID SERIAL NOT NULL, -- int
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     CountryRegionCode varchar(3) NOT NULL,
     "group" varchar(50) NOT NULL, -- Group
     SalesYTD numeric NOT NULL CONSTRAINT "DF_SalesTerritory_SalesYTD" DEFAULT (0.00), -- money
@@ -1186,7 +1173,7 @@ CREATE SCHEMA Sales
   )
   CREATE TABLE Store(
     BusinessEntityID INT NOT NULL,
-    Name "Name" NOT NULL,
+    Name varchar(50) NOT NULL,
     SalesPersonID INT NULL,
     Demographics XML NULL, -- XML(Sales.StoreSurveySchemaCollection)
     rowguid uuid NOT NULL CONSTRAINT "DF_Store_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
