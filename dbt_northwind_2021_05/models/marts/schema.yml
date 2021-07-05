@@ -1,0 +1,22 @@
+
+version: 2
+
+models:
+    - name: dim_clientes
+      description: "Esta é a tabela de dimensão clientes da Northwind"
+      columns:
+          - name: sk_cliente
+            description: "A chave surrogate da dimensão cliente"
+            tests:
+                - unique
+                - not_null
+
+
+    - name: fact_pedido
+      description: "Esta é a tabela de fato pedidos da Northwind. A granularidade dessa tabela é o pedido."
+      columns:
+          - name: id_pedido
+            description: "A chave primária, natural, da fato pedido"
+            tests:
+                - unique
+                - not_null

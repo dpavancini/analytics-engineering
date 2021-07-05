@@ -1,0 +1,22 @@
+version: 2
+
+sources:
+  - name: northwind_erp
+    description: Essa é a fonte de dados do nosso ERP, criada através do Stitch
+    tables:
+      - name: products
+        description: Essa é a tabela de produtos do ERP.
+
+      - name: employees
+        description: Essa é a tabela de funcionários do ERP.
+        
+      - name: customers
+        description: Essa é a tabela de clientes do ERP. O dono desse dado é a equipe comercial.
+
+      - name: suppliers
+
+      - name: shippers
+
+      - name: orders
+
+      - name: order_details
